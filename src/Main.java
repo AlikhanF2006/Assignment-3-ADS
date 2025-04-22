@@ -1,55 +1,34 @@
-import java.util.Random;
-
 public class Main {
     public static void main(String[] args) {
-        MyHashTable<MyTestingClass, Student> table = new MyHashTable<>();
+        // Create BST with Integer keys and String values
+        BST<Integer, String> bst = new BST<>();
 
-        Random random = new Random();
+        // Insert some key-value pairs
+        bst.put(50, "Apple");
+        bst.put(30, "Banana");
+        bst.put(70, "Cherry");
+        bst.put(20, "Date");
+        bst.put(40, "Elderberry");
+        bst.put(60, "Fig");
+        bst.put(80, "Grapes");
 
-        // Insert 10,000 entries
-        for (int i = 0; i < 10000; i++) {
-            String name = "Name" + random.nextInt(10000);
-            int id = random.nextInt(10000);
-            MyTestingClass key = new MyTestingClass(name, id);
-
-            String studentName = "Student" + i;
-            int studentAge = 18 + random.nextInt(5);
-            Student student = new Student(studentName, studentAge);
-
-            table.put(key, student);
+        System.out.println("Initial in-order traversal:");
+        for (var entry : bst.iterator()) {
+            System.out.println(entry.getKey() + " => " + entry.getValue());
         }
 
-        // Print number of entries in each bucket (distribution)
-        System.out.println("Hash table distribution across buckets:");
-        for (int i = 0; i < 11; i++) {
-            int count = countBucket(table, i);
-            System.out.println("Bucket " + i + ": " + count + " entries");
+        // Test get
+        System.out.println("\nGet key 40: " + bst.get(40)); // Elderberry
+
+        // Test delete
+        bst.delete(30); // delete node with two children
+
+        System.out.println("\nIn-order after deleting key 30:");
+        for (var entry : bst.iterator()) {
+            System.out.println(entry.getKey() + " => " + entry.getValue());
         }
 
-        System.out.println("Total entries: " + table.size());
-    }
-
-    // Access internal chainArray using reflection
-    private static <K, V> int countBucket(MyHashTable<K, V> table, int index) {
-        try {
-            var field = MyHashTable.class.getDeclaredField("chainArray");
-            field.setAccessible(true);
-            Object[] array = (Object[]) field.get(table);
-
-            int count = 0;
-            Object node = array[index];
-            var nodeClass = node != null ? node.getClass() : null;
-
-            while (node != null) {
-                var nextField = nodeClass.getDeclaredField("next");
-                nextField.setAccessible(true);
-                node = nextField.get(node);
-                count++;
-            }
-
-            return count;
-        } catch (Exception e) {
-            return 0;
-        }
+        // Test size
+        System.out.println("\nBST size: " + bst.size());
     }
 }
