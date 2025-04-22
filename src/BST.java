@@ -1,6 +1,9 @@
+import java.util.Iterator;
+import java.util.Stack;
+
 /**
  * Custom Binary Search Tree (BST) implementation.
- * Supports insertion, search, and deletion of key-value pairs.
+ * Supports insertion, search, deletion, and in-order iteration.
  */
 public class BST<K extends Comparable<K>, V> {
 
@@ -15,6 +18,27 @@ public class BST<K extends Comparable<K>, V> {
         public Node(K key, V value) {
             this.key = key;
             this.value = value;
+        }
+    }
+
+    /**
+     * Entry class representing a key-value pair (used during iteration).
+     */
+    public class Entry<K, V> {
+        private final K key;
+        private final V value;
+
+        public Entry(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public K getKey() {
+            return key;
+        }
+
+        public V getValue() {
+            return value;
         }
     }
 
@@ -108,5 +132,37 @@ public class BST<K extends Comparable<K>, V> {
      */
     public int size() {
         return size;
+    }
+
+    /**
+     * Returns an iterable collection of key-value pairs in in-order.
+     */
+    public Iterable<Entry<K, V>> iterator() {
+        return () -> new Iterator<>() {
+            private final Stack<Node> stack = new Stack<>();
+
+            {
+                pushLeft(root);
+            }
+
+            private void pushLeft(Node node) {
+                while (node != null) {
+                    stack.push(node);
+                    node = node.left;
+                }
+            }
+
+            @Override
+            public boolean hasNext() {
+                return !stack.isEmpty();
+            }
+
+            @Override
+            public Entry<K, V> next() {
+                Node current = stack.pop();
+                pushLeft(current.right);
+                return new Entry<>(current.key, current.value);
+            }
+        };
     }
 }
