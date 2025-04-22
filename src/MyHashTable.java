@@ -124,4 +124,16 @@ public class MyHashTable<K, V> {
     public int size() {
         return size;
     }
+
+    // Возвращает количество элементов в цепочке по индексу
+    public int getChainSize(int index) {
+        int count = 0;
+        HashNode<K, V> head = chainArray[index];
+        while (head != null) {
+            count++;
+            head = head.next;
+        }
+        return count;
+    }
+
 }
