@@ -1,19 +1,17 @@
 public class Main {
     public static void main(String[] args) {
-        MyHashTable<String, String> table = new MyHashTable<>();
+        MyHashTable<MyTestingClass, Student> table = new MyHashTable<>();
 
-        table.put("apple", "fruit");
-        table.put("carrot", "vegetable");
-        table.put("banana", "fruit");
+        MyTestingClass key1 = new MyTestingClass("Alice", 101);
+        MyTestingClass key2 = new MyTestingClass("Bob", 102);
 
-        System.out.println("carrot -> " + table.get("carrot"));
+        Student student1 = new Student("Alice A.", 19);
+        Student student2 = new Student("Bob B.", 20);
 
-        table.remove("carrot");
-        System.out.println("carrot -> " + table.get("carrot"));
+        table.put(key1, student1);
+        table.put(key2, student2);
 
-        System.out.println("Contains 'fruit': " + table.contains("fruit"));
-        System.out.println("Contains 'vegetable': " + table.contains("vegetable"));
-
-        System.out.println("Key for 'fruit': " + table.getKey("fruit"));
+        System.out.println("Key1 => " + table.get(key1));
+        System.out.println("Key2 => " + table.get(key2));
     }
 }
