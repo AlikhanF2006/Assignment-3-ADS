@@ -71,6 +71,55 @@ public class MyHashTable<K, V> {
         return null;
     }
 
+    // Remove key-value pair by key
+    public void remove(K key) {
+        int index = hash(key);
+        HashNode<K, V> head = chainArray[index];
+        HashNode<K, V> prev = null;
+
+        while (head != null) {
+            if (head.key.equals(key)) {
+                if (prev != null) {
+                    prev.next = head.next;
+                } else {
+                    chainArray[index] = head.next;
+                }
+                size--;
+                return;
+            }
+            prev = head;
+            head = head.next;
+        }
+    }
+
+    // Check if a value exists in the hashtable
+    public boolean contains(V value) {
+        for (int i = 0; i < M; i++) {
+            HashNode<K, V> head = chainArray[i];
+            while (head != null) {
+                if (head.value.equals(value)) {
+                    return true;
+                }
+                head = head.next;
+            }
+        }
+        return false;
+    }
+
+    // Get the key associated with a specific value
+    public K getKey(V value) {
+        for (int i = 0; i < M; i++) {
+            HashNode<K, V> head = chainArray[i];
+            while (head != null) {
+                if (head.value.equals(value)) {
+                    return head.key;
+                }
+                head = head.next;
+            }
+        }
+        return null;
+    }
+
     // Get the number of key-value pairs in the hashtable
     public int size() {
         return size;
